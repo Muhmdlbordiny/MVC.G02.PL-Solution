@@ -36,17 +36,22 @@ namespace MVC.G02.PL.Controllers
            
             return View(model);
         }
-        public IActionResult Details(int? id)
+        public IActionResult Details(int? id,string viewName="Details")
         {
             if (id is null) return BadRequest();//400
            var department = _deptrepository.Get(id.Value);
             if (department == null) return NotFound();//404
-            return View(department);
+            return View(viewName,department);
         }
         public IActionResult Edit(int? id) 
         {
-            var department = _deptrepository.Get(id);
-            return View(department);
+            //if (id is null) return BadRequest();//400
+
+            //var department = _deptrepository.Get(id.Value);
+            //if (department == null) return NotFound();//404
+
+            //return View(department);
+            return Details(id, "Edit");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -65,8 +70,13 @@ namespace MVC.G02.PL.Controllers
         }
         public IActionResult Delete(int? id) 
         {
-            var dept = _deptrepository.Get(id);
-            return View(dept);
+            //if (id is null) return BadRequest();//400
+
+            //var department = _deptrepository.Get(id.Value);
+            //if (department == null) return NotFound();//404
+
+            //return View(department);
+            return Details(id, "Delete");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]

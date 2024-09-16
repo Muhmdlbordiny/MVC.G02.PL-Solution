@@ -19,6 +19,8 @@ namespace MVC.G02.PL
                 options.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"]);
             });//Allow DI for AppDbContext
             builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>();//Allow DI for DepartmentRepository
+            builder.Services.AddScoped<IEmployeeRepositry,EmployeeRepositry>();//Allow DI for DepartmentRepository
+           
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
