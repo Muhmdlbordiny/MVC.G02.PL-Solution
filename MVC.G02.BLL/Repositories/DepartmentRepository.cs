@@ -10,41 +10,41 @@ using System.Threading.Tasks;
 namespace MVC.G02.BLL.Repositories
 {
     //ClR
-    public class DepartmentRepository : IDepartmentRepository
+    public class DepartmentRepository :GenericRepositry<Department>, IDepartmentRepository
     {
-        private readonly AppDbContext _context;//Null
-        public DepartmentRepository(AppDbContext context)//Ask Clr create object from AppDbContext
+        //private readonly AppDbContext _context;//Null
+        public DepartmentRepository(AppDbContext context):base(context)//Ask Clr create object from AppDbContext
         {
-            _context = context;   
+            //_context = context;   
         }
-        public int Add(Department entity)
-        {
-             _context.Departments.Add(entity);
-            return _context.SaveChanges();
-        }
+        //public int Add(Department entity)
+        //{
+        //     _context.Departments.Add(entity);
+        //    return _context.SaveChanges();
+        //}
 
-        public int Delete(Department entity)
-        {
-            _context.Departments.Remove(entity);
-            return _context.SaveChanges();
-        }
+        //public int Delete(Department entity)
+        //{
+        //    _context.Departments.Remove(entity);
+        //    return _context.SaveChanges();
+        //}
 
-        public Department Get(int? id)
-        {
-            //return _context.Departments.FirstOrDefault(x => x.Id == id);
-            return _context.Departments.Find(id);
+        //public Department Get(int? id)
+        //{
+        //    //return _context.Departments.FirstOrDefault(x => x.Id == id);
+        //    return _context.Departments.Find(id);
 
-        }
+        //}
 
-        public IEnumerable<Department> GetAll()
-        {
-           return _context.Departments.ToList();
-        }
+        //public IEnumerable<Department> GetAll()
+        //{
+        //   return _context.Departments.ToList();
+        //}
 
-        public int Update(Department entity)
-        {
-            _context.Departments.Update(entity);
-            return _context.SaveChanges();
-        }
+        //public int Update(Department entity)
+        //{
+        //    _context.Departments.Update(entity);
+        //    return _context.SaveChanges();
+        //}
     }
 }

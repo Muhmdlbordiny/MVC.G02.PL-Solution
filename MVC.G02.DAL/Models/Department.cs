@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace MVC.G02.DAL.Models
 {
-    public class Department
+    public class Department:BaseEntity
     {
-        public int Id { get; set; }
         [Required(ErrorMessage ="Code is Required !")]
         public string Code {  get; set; }
         [Required(ErrorMessage ="Must be Enter Name")]

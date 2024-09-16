@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace MVC.G02.BLL.Interfaces
 {
-    public interface IDepartmentRepository
+    public interface IDepartmentRepository:IGenericRepositry<Department>    
     {
-        IEnumerable<Department> GetAll();
-        Department Get(int?id);
-        int Add(Department entity);
-        int Update(Department entity);
-        int Delete(Department entity);
+        //IEnumerable<Department> GetAll();
+        //Department Get(int?id);
+        //int Add(Department entity);
+        //int Update(Department entity);
+        //int Delete(Department entity);
     }
 }
