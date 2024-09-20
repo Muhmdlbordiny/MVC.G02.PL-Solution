@@ -1,4 +1,5 @@
-﻿using MVC.G02.BLL.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using MVC.G02.BLL.Interfaces;
 using MVC.G02.DAL.Data.Contexts;
 using MVC.G02.DAL.Models;
 using System;
@@ -16,9 +17,10 @@ namespace MVC.G02.BLL.Repositories
         {
            // _context = context;   
         }
-       
-       
 
-        
+        public IEnumerable<Employee> GetByName(string name)
+        {
+           return _context.Employees.Where(E=>E.Name.ToLower().Contains(name.ToLower())).Include(E=>E.WorkFor).ToList();
+        }
     }
 }
