@@ -1,4 +1,5 @@
-﻿using MVC.G02.BLL.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using MVC.G02.BLL.Interfaces;
 using MVC.G02.DAL.Data.Contexts;
 using MVC.G02.DAL.Models;
 using System;
@@ -11,7 +12,7 @@ namespace MVC.G02.BLL.Repositories
 {
     public class GenericRepositry<T> : IGenericRepositry<T>where T : BaseEntity
     {
-        private readonly AppDbContext _context;
+        private protected readonly AppDbContext _context;
         public GenericRepositry(AppDbContext context)
         {
             _context= context;
@@ -19,11 +20,19 @@ namespace MVC.G02.BLL.Repositories
 
         public IEnumerable<T> GetAll()
         {
+            if (typeof(T) == typeof(Employee))
+            {
+                return (IEnumerable<T>) _context.Employees.Include(E => E.WorkFor).ToList();
+            }
+
             return _context.Set<T>().ToList();
+
+            
         }
         public T Get(int? id)
         {
-            return _context.Set<T>().Find(id);
+           
+                return _context.Set<T>().Find(id);
         }
 
         

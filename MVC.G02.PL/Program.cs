@@ -1,7 +1,10 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MVC.G02.BLL.Interfaces;
 using MVC.G02.BLL.Repositories;
 using MVC.G02.DAL.Data.Contexts;
+using MVC.G02.PL.Mapping.Employees;
+using MVC.G02.PL.Services;
 
 namespace MVC.G02.PL
 {
@@ -20,7 +23,10 @@ namespace MVC.G02.PL
             });//Allow DI for AppDbContext
             builder.Services.AddScoped<IDepartmentRepository,DepartmentRepository>();//Allow DI for DepartmentRepository
             builder.Services.AddScoped<IEmployeeRepositry,EmployeeRepositry>();//Allow DI for DepartmentRepository
-           
+            builder.Services.AddAutoMapper(typeof(Employeeprofile));//allow DI
+            //builder.Services.AddScoped<IScopedService,ScopedService>();
+            //builder.Services.AddTransient<ITransientService,TransientService>();
+            //builder.Services.AddSingleton<ISingeltonService, SingeltonService>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

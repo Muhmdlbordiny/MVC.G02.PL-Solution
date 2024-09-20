@@ -16,6 +16,7 @@ namespace MVC.G02.DAL.Models
         [DisplayName(" Department Name")]
         public string Name { get; set;}
         public DateTime DateOfCreation {  get; set; }
+        public IEnumerable<Employee>? Employees { get; set; }
 
     }
 }
