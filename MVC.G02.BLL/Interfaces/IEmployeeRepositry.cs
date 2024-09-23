@@ -9,7 +9,7 @@ namespace MVC.G02.BLL.Interfaces
 {
     public interface IEmployeeRepositry:IGenericRepositry<Employee>
     {
-       IEnumerable<Employee> GetByName(string name);
+      Task <IEnumerable<Employee>> GetByNameAsync(string name);
         //IEnumerable<Employee> GetAll();
         //Employee Get(int id);
         //int Add(Employee emp);

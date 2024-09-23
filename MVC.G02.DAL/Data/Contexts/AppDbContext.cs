@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using MVC.G02.DAL.Data.Configurations;
 using MVC.G02.DAL.Models;
 using System;
@@ -10,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace MVC.G02.DAL.Data.Contexts
 {
-    public class AppDbContext:DbContext
+    public class AppDbContext:IdentityDbContext<ApplicationUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) :base(options) //chain on open connection with database direct
         {
@@ -23,10 +25,12 @@ namespace MVC.G02.DAL.Data.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            //modelBuilder.Entity<IdentityRole>().ToTable("Roles");
         }
         public DbSet<Department> Departments {  get; set; }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<ApplicationUser>ApplicationUsers { get; set; }
     }
 }

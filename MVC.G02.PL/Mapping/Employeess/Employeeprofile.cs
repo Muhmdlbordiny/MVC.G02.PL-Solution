@@ -7,7 +7,7 @@ namespace MVC.G02.PL.Mapping.Employees
     {
         public Employeeprofile() 
         {
-            CreateMap<Employee, Employeeprofile>().ReverseMap();
+            CreateMap<Employee, EmployeeViewModel>().ReverseMap();
             //CreateMap< Employeeprofile, Employee>();
         }
     }

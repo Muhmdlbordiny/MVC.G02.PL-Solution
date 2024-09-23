@@ -7,14 +7,15 @@ namespace MVC.G02.PL.Controllers
 {
     public class DepartmentController:Controller
     {
-        private readonly IDepartmentRepository _deptrepository;//Null
-        public DepartmentController(IDepartmentRepository deptrepository)//Ask Clr to create object from DepartmentRepository
+        // private readonly IDepartmentRepository _deptrepository;//Null
+        private readonly IUnitOfWork _unitOfWork;
+        public DepartmentController(IUnitOfWork unitOfWork)//IDepartmentRepository deptrepository)//Ask Clr to create object from DepartmentRepository
         {
-            _deptrepository = deptrepository;
+            _unitOfWork = unitOfWork;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-           var departments= _deptrepository.GetAll();
+           var departments= await _unitOfWork.DepartmentRepository.GetAllAsync();
             return View(departments);
         }
         public IActionResult Create() 
@@ -23,11 +24,12 @@ namespace MVC.G02.PL.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Department model)
+        public async Task<IActionResult> Create(Department model)
         {
             if (ModelState.IsValid)
             {
-                var count = _deptrepository.Add(model);
+                    _unitOfWork.DepartmentRepository.Add(model);
+                var count = await _unitOfWork.Complete();
                 if (count > 0)
                 {
                     return RedirectToAction(nameof(Index));
@@ -36,14 +38,14 @@ namespace MVC.G02.PL.Controllers
            
             return View(model);
         }
-        public IActionResult Details(int? id,string viewName="Details")
+        public async Task< IActionResult> Details(int? id,string viewName="Details")
         {
             if (id is null) return BadRequest();//400
-           var department = _deptrepository.Get(id.Value);
+           var department = await _unitOfWork.DepartmentRepository.GetAsync(id.Value);
             if (department == null) return NotFound();//404
             return View(viewName,department);
         }
-        public IActionResult Edit(int? id) 
+        public async Task<IActionResult> Edit(int? id) 
         {
             //if (id is null) return BadRequest();//400
 
@@ -51,15 +53,16 @@ namespace MVC.G02.PL.Controllers
             //if (department == null) return NotFound();//404
 
             //return View(department);
-            return Details(id, "Edit");
+            return await Details(id, "Edit");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Department model)
+        public async Task< IActionResult> Edit(Department model)
         {
             if (ModelState.IsValid)
             {
-                var count = _deptrepository.Update(model);
+                    _unitOfWork.DepartmentRepository.Update(model);
+                var count = await _unitOfWork.Complete();
                 if (count > 0)
                 {
                     return RedirectToAction(nameof(Index));
@@ -68,7 +71,7 @@ namespace MVC.G02.PL.Controllers
             }
             return View(model);
         }
-        public IActionResult Delete(int? id) 
+        public async Task<IActionResult> Delete(int? id) 
         {
             //if (id is null) return BadRequest();//400
 
@@ -76,15 +79,16 @@ namespace MVC.G02.PL.Controllers
             //if (department == null) return NotFound();//404
 
             //return View(department);
-            return Details(id, "Delete");
+            return await Details(id, "Delete");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(Department model)
+        public async Task< IActionResult> Delete(Department model)
         {
             if (ModelState.IsValid)
             {
-                var count = _deptrepository.Delete(model);
+                    _unitOfWork.DepartmentRepository.Delete(model);
+                var count =await _unitOfWork.Complete();
                 if (count > 0)
                 {
                     return RedirectToAction(nameof(Index));

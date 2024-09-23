@@ -33,3 +33,8 @@
     <label asp-for="HiringDate" class="col-form-lable"></label>
     <input asp-for="HiringDate" class="form-control" readonly />
 </div>
+<div class="col-md-6">
+    <label asp-for="ImageName" class="col-form-lable"></label>
+    <img class="card-img-top mb-5 mb-md-0" src="~/files/images/@Model.ImageName" alt=".." width="300" height="300" />
+    </div>
+
