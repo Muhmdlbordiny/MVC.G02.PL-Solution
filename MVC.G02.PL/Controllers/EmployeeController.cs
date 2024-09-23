@@ -3,46 +3,51 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using MVC.G02.BLL.Interfaces;
 using MVC.G02.DAL.Models;
+using MVC.G02.PL.Helper;
 using MVC.G02.PL.ViewModels.Employee;
 
 namespace MVC.G02.PL.Controllers
 {
     public class EmployeeController : Controller
-    {
-        private readonly IEmployeeRepositry _empRepositry;
-        private readonly IDepartmentRepository _departmentRepository;
+    {//
+        //private readonly IEmployeeRepositry _empRepositry;
+        //private readonly IDepartmentRepository _departmentRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public EmployeeController(IEmployeeRepositry employeeRepositry, IDepartmentRepository departmentRepository,IMapper mapper)
+        public EmployeeController(//IEmployeeRepositry employeeRepositry,
+                                  //IDepartmentRepository departmentRepository,
+                                  IUnitOfWork unitOfWork,
+                                  IMapper mapper)
         {
-            _empRepositry = employeeRepositry;
-            _departmentRepository = departmentRepository;
+            _unitOfWork = unitOfWork;
+            //_empRepositry = employeeRepositry;
+            //_departmentRepository = departmentRepository;
             _mapper = mapper;
         }
-        public IActionResult Index(string Inputsearch)
+        public async Task< IActionResult> Index(string Inputsearch)
         {
             var employee= Enumerable.Empty<Employee>();// Refer to Empty sequence from Employee
             //IEnumerable<Employee> employee;
             if (Inputsearch.IsNullOrEmpty())
             {
-              employee = _empRepositry.GetAll();
-
+              employee =await _unitOfWork.EmployeeRepositry.GetAllAsync();
             }
             else
             {
-               employee = _empRepositry.GetByName(Inputsearch);
+               employee = await _unitOfWork.EmployeeRepositry.GetByNameAsync(Inputsearch);
             }
            var result = _mapper.Map<IEnumerable<EmployeeViewModel>>(employee);
             return View(result);
         }
-        public IActionResult Create()
+        public async Task< IActionResult> Create()
         {
-           var departments = _departmentRepository.GetAll();
+           var departments = await _unitOfWork.DepartmentRepository.GetAllAsync();
             ViewData["departments"] = departments;
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(EmployeeViewModel model)
+        public async Task< IActionResult> Create(EmployeeViewModel model)
         {
             try
             {
@@ -66,8 +71,10 @@ namespace MVC.G02.PL.Controllers
                 //2.Auto Mapping
                 if (ModelState.IsValid)
                 {
+                    model.ImageName = DocumentSetting.UploadFile(model.Image, "images");
                  var employee = _mapper.Map<Employee>(model);
-                    var count = _empRepositry.Add(employee);
+                         _unitOfWork.EmployeeRepositry.Add(employee);
+                    var count = await _unitOfWork.Complete();
                     if (count > 0)
                     {
                         TempData["Message"] = "Employee is Created!!";
@@ -87,10 +94,10 @@ namespace MVC.G02.PL.Controllers
 
             return View(model);
         }
-        public IActionResult Details(int? id,string viewName)
+        public async Task<IActionResult> Details(int? id,string viewName)
         {
             if (id is null) return BadRequest();
-            var model = _empRepositry.Get(id.Value);
+            var model = await _unitOfWork.EmployeeRepositry.GetAsync(id.Value);
             if (model == null) return NotFound();
             //Mapping :Employee --> EmployeeViewModel
             //Manual Mapping
@@ -112,14 +119,14 @@ namespace MVC.G02.PL.Controllers
              var employeeViewModel = _mapper.Map<EmployeeViewModel>(model);
             return View(viewName, employeeViewModel);
         }
-        public IActionResult Edit(int?id) 
+        public async Task< IActionResult> Edit(int?id) 
         {
-            var departments = _departmentRepository.GetAll();
+            var departments =await _unitOfWork.DepartmentRepository.GetAllAsync();
             ViewData["departments"] = departments;
-            return Details(id, "Edit");
+            return await Details(id, "Edit");
         }
         [HttpPost]
-        public IActionResult Edit([FromRoute]int?id,EmployeeViewModel model)
+        public async Task< IActionResult> Edit([FromRoute]int?id,EmployeeViewModel model)
         {
             try
             {
@@ -142,9 +149,15 @@ namespace MVC.G02.PL.Controllers
                     //    PhoneNumber = model.PhoneNumber
 
                     //};
+                    if(model.ImageName is not null)
+                    {
+                        DocumentSetting.DeleteFile(model.ImageName, "images");
+                    }
+                    model.ImageName = DocumentSetting.UploadFile(model.Image, "images");
                     var employee = _mapper.Map<Employee>(model);
 
-                    var count = _empRepositry.Update(employee);
+                        _unitOfWork.EmployeeRepositry.Update(employee);
+                    var count = await _unitOfWork.Complete();
                     if (count > 0)
                     {
                         return RedirectToAction(nameof(Index));
@@ -157,13 +170,13 @@ namespace MVC.G02.PL.Controllers
             return View(model);
 
         }
-        public IActionResult Delete(int? id) 
+        public async Task <IActionResult> Delete(int? id) 
         {
-          return Details(id,"Delete");
+          return await Details(id,"Delete");
         }
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public IActionResult Delete([FromRoute]int?id,EmployeeViewModel model)
+        public async Task < IActionResult> Delete([FromRoute]int?id,EmployeeViewModel model)
         {
             try
             {
@@ -188,9 +201,12 @@ namespace MVC.G02.PL.Controllers
                     var employee  = _mapper.Map<Employee>(model);
 
 
-                    var count = _empRepositry.Delete(employee);
+                        _unitOfWork.EmployeeRepositry.Delete(employee);
+                    var count =await _unitOfWork.Complete();
                     if (count > 0)
                     {
+                        DocumentSetting.DeleteFile(model.ImageName, "images");
+
                         return RedirectToAction(nameof(Index));
                     }
                 }
