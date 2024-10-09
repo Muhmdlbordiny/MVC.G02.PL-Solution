@@ -11,7 +11,7 @@ namespace MVC.G02.DAL.Models
     {
         public string FirstName {  get; set; }
         public string LastName { get; set; }
-        public bool IsAgree { get; set; }
+        public bool? IsAgree { get; set; }
 
     }
 }

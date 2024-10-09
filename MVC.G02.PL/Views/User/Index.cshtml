@@ -1,0 +1,66 @@
+﻿@model IEnumerable<UserViewModel>
+@{
+    ViewData["Title"]="Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1>All Users</h1>
+<br />
+<br />
+<form asp-action="Index">
+    <div class="row m-5">
+        <div class="col-8">
+            <input type="text" id="id" style="transform:scale(1.1s)" name="Inputsearch" class="form-control" />
+
+        </div>
+        <div class="col-4 ">
+            <input type="submit" value="Search" class="btn btn-success" />
+
+        </div>
+    </div>
+   
+
+
+    
+    <br />
+    <br />
+    @if (Model.Count() > 0)
+    {
+        <table id="tble" class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(X => X.Id)</th>
+                    <th>@Html.DisplayNameFor(x => x.FirstName)</th>
+                    <th>@Html.DisplayNameFor(x => x.LastName)</th>
+                    <th>@Html.DisplayNameFor(x => x.Email)</th>
+                    <th>@Html.DisplayNameFor(x => x.Roles)</th>
+                   
+                    <th>Details</th>
+                    <th>Update</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.Id</td>
+                        <td>@user.FirstName</td>
+                        <td>@user.LastName</td>
+                        <td>@user.Email</td>
+                        <td>@string.Join(" ",user.Roles)</td>
+                        
+                        <partial name="_Buttonpartialviews" model="@user.Id" />
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+
+    }
+    else
+    {
+        <div class="alert alert-danger">
+            <h4>There are No Users</h4>
+        </div>
+    }
+</form>

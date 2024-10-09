@@ -5,7 +5,7 @@
 <h1>All Employees</h1>
 <br />
 <br />
-<form asp-action="Index" >
+<form asp-controller="Employee" asp-action="Index">
     <div class="row m-5">
         <div class="col-8">
             <input type="text" id="id"  style="transform:scale(1.1s)" name="Inputsearch" class="form-control" />
@@ -61,7 +61,7 @@
                     <td>@Html.DisplayFor(M=>emp.Salary)</td>
                     <td>@Html.DisplayFor(M=>emp.IsActive)</td>
                     <td>@emp.HiringDate</td>
-                    <partial name="_Buttonpartialviews"model="@emp.Id" />
+                    <partial name="_Buttonpartialviews"model="@emp.Id.ToString()" />
                 </tr>
             }
         </tbody>
