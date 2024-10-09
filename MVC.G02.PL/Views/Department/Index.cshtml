@@ -29,7 +29,7 @@
                 <td style="background-color:darkorange">@department.Code</td>
                 <td style="background-color:greenyellow">@department.Name</td>
                 <td style="background-color:lightseagreen">@department.DateOfCreation </td>
-                    <partial name="_Buttonpartialviews"model="@department.Id" />
+                    <partial name="_Buttonpartialviews"model="@department.Id.ToString()" />
             </tr>
 
         }

@@ -3,9 +3,11 @@ using MVC.G02.PL.ViewModels;
 using MVC.G02.PL.Services;
 using System.Diagnostics;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MVC.G02.PL.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

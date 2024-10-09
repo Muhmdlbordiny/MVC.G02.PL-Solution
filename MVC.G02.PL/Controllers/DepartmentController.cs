@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MVC.G02.BLL.Interfaces;
 using MVC.G02.BLL.Repositories;
 using MVC.G02.DAL.Models;
 
 namespace MVC.G02.PL.Controllers
 {
-    public class DepartmentController:Controller
+	[Authorize]
+
+	public class DepartmentController:Controller
     {
         // private readonly IDepartmentRepository _deptrepository;//Null
         private readonly IUnitOfWork _unitOfWork;

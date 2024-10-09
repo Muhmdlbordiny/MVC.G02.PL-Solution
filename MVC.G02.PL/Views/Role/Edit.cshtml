@@ -1,17 +1,18 @@
-﻿@model EmployeeViewModel
+﻿@model RoleViewModel
 @{
     ViewData["Title"] = "Edit";
 }
-<h1>Edit Employeee</h1>
+<h1>Edit Role</h1>
 <br />
 <br />
-<form method="post" asp-controller="Employee" asp-action="Edit" enctype="multipart/form-data">
+<form method="post" asp-action="Edit" enctype="multipart/form-data">
    <div asp-validation-summary="All"class="alert alert-danger"></div>
-    <partial name="partial/EditcreateEmployeePartialView" />
-    <input asp-for="ImageName"hidden />
+    <partial name="RolePartial/EditcreateRolePartialView"model="@Model" />
     <br/>
+    <a asp-action="AddOrRemove" asp-route-roleid="@Model.Id" class="btn btn-success">Add Or Remove</a>
+
     <input type="submit"value="Save"class="btn btn-primary" />
-    <a asp-action="Index" class="btn btn-light">Back To List</a>
+    <a  asp-action="Index" class="btn btn-light">Back To List</a>
 
 </form>
 @section Scripts {

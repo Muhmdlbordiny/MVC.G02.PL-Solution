@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using MVC.G02.BLL.Interfaces;
@@ -8,7 +9,9 @@ using MVC.G02.PL.ViewModels.Employee;
 
 namespace MVC.G02.PL.Controllers
 {
-    public class EmployeeController : Controller
+	[Authorize]
+
+	public class EmployeeController : Controller
     {//
         //private readonly IEmployeeRepositry _empRepositry;
         //private readonly IDepartmentRepository _departmentRepository;
